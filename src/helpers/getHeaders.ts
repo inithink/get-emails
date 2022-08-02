@@ -9,6 +9,7 @@ export function getHeaders(imap: Imap, uids: number[]) {
       bodies: 'HEADER.FIELDS (TO FROM SUBJECT DATE CONTENT-TYPE)'
     });
 
+    let index = 0;
     f.on('message', function (msg, seqNo) {
       msg.on('body', function (stream, info) {
         promises.push(
@@ -18,7 +19,7 @@ export function getHeaders(imap: Imap, uids: number[]) {
             })
             .then(it => {
               return {
-                uid: uids[seqNo - 1],
+                uid: uids[index++],
                 date: new Date(it['date'][0]),
                 subject: it['subject'][0],
                 from: it['from'][0],

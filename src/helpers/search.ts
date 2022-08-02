@@ -3,11 +3,7 @@ import {Options} from "../getEmails";
 
 export function search(imap: Imap, options: Options): Promise<number[]> {
   return new Promise((resolve, reject) => {
-    let criteria: any[] = ['ALL'];
-
-    criteria.push(['SINCE', options.since || new Date(Date.now() - 10 * 60 * 1000)]);
-
-    imap.search(criteria, (err, uids) => {
+    imap.search(options.criteria, (err, uids) => {
       if (err) {
         return reject(err);
       }

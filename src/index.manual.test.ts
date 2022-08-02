@@ -10,10 +10,11 @@ let options: Options = {
     port: 993,
     tls: true,
   },
-  since: new Date(Date.now() - 1000),
-  filterByHeader: header => header.subject.indexOf('[AuthKey] ') !== -1
+  criteria: ['ALL', ['HEADER', 'FROM', 'admin@11st.co.kr']]
 };
 
 getEmails(options)
   .then(console.log)
   .catch(console.error);
+
+

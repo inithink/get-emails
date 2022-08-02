@@ -9,8 +9,9 @@ export function getMessages(imap: Imap, headers: Header[]): Promise<Message[]> {
   return new Promise((resolve, reject) => {
     const f = imap.fetch(headers.map(it => it.uid), {bodies: ''});
     let result: Promise<Message>[] = [];
+    let index = 0;
     f.on('message', function (msg, seqNo) {
-      let header = headers[seqNo - 1];
+      let header = headers[index++];
       msg.on('body', function (stream) {
         result.push(
           streamToString(stream)

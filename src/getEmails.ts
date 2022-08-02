@@ -8,16 +8,24 @@ import {getMessages} from "./helpers/getMessages";
 
 export interface Options {
   imap: Imap.Config,
-  since?: Date;
+  criteria: any[],
   filterByHeader?: (header: Header) => boolean
 }
 
 export async function getEmails(options: Options) {
   let conn = await createImap(options.imap);
   let uids = await search(conn, options);
+
+  if(uids.length === 0){
+    return [];
+  }
+
   let headers = await getHeaders(conn, uids);
   if (options.filterByHeader) {
     headers = headers.filter(options.filterByHeader);
+  }
+  if(headers.length === 0){
+    return [];
   }
   return await getMessages(conn, headers);
 }
