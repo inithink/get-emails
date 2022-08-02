@@ -16,7 +16,7 @@ export async function getEmails(options: Options) {
   let conn = await createImap(options.imap);
   let uids = await search(conn, options);
 
-  if(uids.length === 0){
+  if (uids.length === 0) {
     return [];
   }
 
@@ -24,10 +24,12 @@ export async function getEmails(options: Options) {
   if (options.filterByHeader) {
     headers = headers.filter(options.filterByHeader);
   }
-  if(headers.length === 0){
+  if (headers.length === 0) {
     return [];
   }
-  return await getMessages(conn, headers);
+  let result = await getMessages(conn, headers);
+  conn.destroy();
+  return result;
 }
 
 

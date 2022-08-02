@@ -13,6 +13,7 @@ let options: Options = {
   criteria: ['ALL', ['HEADER', 'FROM', 'admin@11st.co.kr']]
 };
 
+
 getEmails(options)
   .then(console.log)
   .catch(console.error);
