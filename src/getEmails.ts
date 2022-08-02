@@ -28,7 +28,10 @@ export async function getEmails(options: Options) {
     return [];
   }
   let result = await getMessages(conn, headers);
-  conn.destroy();
+  conn.closeBox(() => {
+    conn.destroy();
+    conn.end();
+  });
   return result;
 }
 
