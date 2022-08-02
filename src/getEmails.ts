@@ -12,6 +12,13 @@ export interface Options {
   filterByHeader?: (header: Header) => boolean
 }
 
+function closeConnection(conn: Imap) {
+  return new Promise((resolve) => {
+    conn.once('close', resolve);
+    conn.end();
+  });
+}
+
 export async function getEmails(options: Options) {
   let conn = await createImap(options.imap);
   let uids = await search(conn, options);
@@ -28,10 +35,7 @@ export async function getEmails(options: Options) {
     return [];
   }
   let result = await getMessages(conn, headers);
-  conn.closeBox(() => {
-    conn.destroy();
-    conn.end();
-  });
+  await closeConnection(conn);
   return result;
 }
 
